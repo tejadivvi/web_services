@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is Metro/2.3.2-b608 (trunk-7979; 2015-01-21T12:50:19+0000) JAXWS-RI/2.2.11-b150120.1832 JAXWS-API/2.2.12 JAXB-RI/2.2.12-b141219.1637 JAXB-API/2.2.13-b141020.1521 svn-revision#unknown. --><xs:schema xmlns:tns="http://cal/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://cal/">
+
+<xs:element name="Add" type="tns:Add"/>
+
+<xs:element name="AddResponse" type="tns:AddResponse"/>
+
+<xs:element name="Div" type="tns:Div"/>
+
+<xs:element name="DivResponse" type="tns:DivResponse"/>
+
+<xs:element name="Mul" type="tns:Mul"/>
+
+<xs:element name="MulResponse" type="tns:MulResponse"/>
+
+<xs:element name="Sub" type="tns:Sub"/>
+
+<xs:element name="SubResponse" type="tns:SubResponse"/>
+
+<xs:complexType name="Sub">
+<xs:sequence>
+<xs:element name="number1" type="xs:double"/>
+<xs:element name="number2" type="xs:double"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="SubResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:double"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Div">
+<xs:sequence>
+<xs:element name="number1" type="xs:double"/>
+<xs:element name="number2" type="xs:double"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="DivResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:double"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Add">
+<xs:sequence>
+<xs:element name="number1" type="xs:double"/>
+<xs:element name="number2" type="xs:double"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="AddResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:double"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Mul">
+<xs:sequence>
+<xs:element name="number1" type="xs:double"/>
+<xs:element name="number2" type="xs:double"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="MulResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:double"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>

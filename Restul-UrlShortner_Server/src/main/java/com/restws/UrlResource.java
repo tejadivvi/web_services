@@ -21,21 +21,23 @@ import com.sun.jersey.spi.resource.Singleton;
 @Singleton
 public class UrlResource {
 
-	private TreeMap<Integer, TargetUrl> urlMap = new TreeMap<Integer, TargetUrl>();
+	private TreeMap<String, TargetUrl> urlMap = new TreeMap<String, TargetUrl>();
 
 	public UrlResource() {
 
 		TargetUrl url = new TargetUrl();
 		url.setAddress("www.gmail.com");
 		url.setId(0);
-		urlMap.put(0, url);
+		url.setShortUrl(0);
+		urlMap.put(url.getShortUrl(), url);
 	}
 
 	@POST
-	@Path("{url}")
+	@Path("/{url}")
 	@Produces("text/plain")
 	@Consumes("application/xml")
 	public Response addUrl(@PathParam("url") String url) {
+		System.out.println("Entered in the post method.");
 		boolean newUrl = true;
 		TargetUrl tu = new TargetUrl();
 		
@@ -53,20 +55,16 @@ public class UrlResource {
 			int id = urlMap.size();
 			tu.setId(id);
 			tu.setAddress(url);
-			urlMap.put(id, tu);
-			String output = "Shorter version of url: " + url + " is " + tu.getId();
+			tu.setShortUrl(id);
+			urlMap.put(tu.getShortUrl(), tu);
+			String output = "Shorter version of url: " + url + " is " + tu.getShortUrl();
 			return Response.status(201).entity(output).build();
 		} else {
-			int id = urlMap.size();
-			tu.setId(id);
-			tu.setAddress(url);
-			urlMap.put(id, tu);
 			String output = "Error, URL already in the map.";
 			return Response.status(400).entity(output).build();
 		}
 	}
 
-// Example: http://localhost:8080/Restul-UrlShortner/service/targetresource/url/www.gmail.com
 	@GET
 	@Path("/url/{url}")
 	@Produces("text/plain")
@@ -86,7 +84,7 @@ public class UrlResource {
 		}
 		
 		if (found) {
-			String output = "Shorter version of url: " + url + " is " + tu.getId();
+			String output = "Shorter version of url: " + url + " is " + tu.getShortUrl();
 			return Response.status(200).entity(output).build();
 		} else {
 			String output = "Error, URL not found in the map.";
@@ -94,19 +92,19 @@ public class UrlResource {
 		}
 	}
 
-// Example: http://localhost:8080/Restul-UrlShortner/service/targetresource/id/0	
+
 	@GET
-	@Path("/id/{id}")
+	@Path("/id/{shortVersion}")
 	@Produces("text/plain")
 	@Consumes("application/xml")
-	public Response returnUrl(@PathParam("url") int id) {
+	public Response returnUrl(@PathParam("shortVersion") String shortVersion) {
 		boolean found = false;
 		TargetUrl tu = new TargetUrl();
 		
 		if (!urlMap.isEmpty()) {			
-			for (int urlId : urlMap.keySet()) {
-				if (urlId == id) {
-					tu = urlMap.get(urlId);
+			for (String shortUrl : urlMap.keySet()) {
+				if (shortUrl.equals(shortVersion)) {
+					tu = urlMap.get(shortVersion);
 					found = true;
 					break;					
 				} 
@@ -119,33 +117,48 @@ public class UrlResource {
 			output = "Url: " + tu.getAddress();
 			responseId = 301;
 		} else {
-			output = "Identificator " + id + " not found.";
+			output = "Identificator " + shortVersion + " not found.";
 			responseId = 404;
 		}
 		return Response.status(responseId).entity(output).build();
 	}
 	
-	@PUT
-	@Path("/id/{id}")
+	@GET
 	@Produces("text/plain")
 	@Consumes("application/xml")
-	public Response handlePUTId(@PathParam("url") int id) {
+	public Response returnKeys() {
+		boolean found = false;
+		TargetUrl tu = new TargetUrl();
+		
+		int responseId = 200;
+		String output;
+		output = "Keys: " + urlMap.keySet();
+		
+		return Response.status(responseId).entity(output).build();
+	}	
+	
+	@PUT
+	@Path("/id/{shortVersion}")
+	@Produces("text/plain")
+	@Consumes("application/xml")
+	public Response handlePUTId(@PathParam("shortVersion") String shortVersion) {
 			String output = "Operation not allowed.";
 			int responseId = 400;
 		return Response.status(responseId).entity(output).build();
 	}
 	
 	@DELETE
-	@Path("{id}")
+	@Path("/id/{shortVersion}")
 	@Produces("text/plain")
 	@Consumes("application/xml")
-	public Response deleteUrl(@PathParam("id") int id) {
+	public Response deleteUrl(@PathParam("shortVersion") String shortVersion) {
+		System.out.println("Entered in the delete method.");
 		boolean found = false;
 		
 		if (!urlMap.isEmpty()) {			
-			for (int urlId : urlMap.keySet()) {
-				if (urlId == id) {
-					urlMap.remove(id);
+			for (String shortUrl : urlMap.keySet()) {
+				if (shortUrl.equals(shortVersion)) {
+					urlMap.remove(shortUrl);
 					found = true;
 					break;					
 				} 
@@ -155,10 +168,10 @@ public class UrlResource {
 		String output;
 		
 		if (found) {
-			output = "Identificator " + id + " removed";
+			output = "Identificator " + shortVersion + " removed";
 			responseId = 204;
 		} else {
-			output = "Identificator " + id + " not found.";
+			output = "Identificator " + shortVersion + " not found.";
 			responseId = 404;
 		}
 		return Response.status(responseId).entity(output).build();

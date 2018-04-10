@@ -17,5 +17,15 @@
 			<artifactId>jersey-server</artifactId>
 			<version>1.9</version>
 		</dependency>
+		<dependency>
+    		<groupId>org.apache.httpcomponents</groupId>
+    		<artifactId>httpclient</artifactId>
+    		<version>4.5.5</version>
+		</dependency>
+		<dependency>
+    		<groupId>com.sun.jersey</groupId>
+    		<artifactId>jersey-client</artifactId>
+    		<version>1.9.1</version>
+		</dependency>
 	</dependencies>  
 </project>

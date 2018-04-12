@@ -37,32 +37,46 @@ public class UrlResource {
 	@Produces("text/plain")
 	@Consumes("application/xml")
 	public Response addUrl(@PathParam("url") String url) {
-		System.out.println("Entered in the post method.");
-		boolean newUrl = true;
-		TargetUrl tu = new TargetUrl();
+
+		String output = "";
+		int responseStatus;
 		
-		if (!urlMap.isEmpty()) {			
-			for (TargetUrl storedUrl : urlMap.values()) {
-				if (storedUrl.getAddress().equals(url)) {
-					newUrl = false;
-					tu = storedUrl;
-					break;					
-				} 
+		if(isValidInputUrl(url)) {
+			
+			boolean newUrl = true;
+			TargetUrl tu = new TargetUrl();
+
+			
+			if (!urlMap.isEmpty()) {			
+				for (TargetUrl storedUrl : urlMap.values()) {
+					if (storedUrl.getAddress().equals(url)) {
+						newUrl = false;
+						tu = storedUrl;
+						break;					
+					} 
+				}
+			}
+			
+			if (newUrl) {
+				int id = urlMap.size();
+				tu.setId(id);
+				tu.setAddress(url);
+				tu.setShortUrl(id);
+				urlMap.put(tu.getShortUrl(), tu);
+				output = "Shorter version of url: " + url + " is " + tu.getShortUrl();
+				responseStatus = 201;
+				
+			} else {
+				output = "Error, URL already in the map.";
+				responseStatus = 400;
 			}
 		}
-		
-		if (newUrl) {
-			int id = urlMap.size();
-			tu.setId(id);
-			tu.setAddress(url);
-			tu.setShortUrl(id);
-			urlMap.put(tu.getShortUrl(), tu);
-			String output = "Shorter version of url: " + url + " is " + tu.getShortUrl();
-			return Response.status(201).entity(output).build();
-		} else {
-			String output = "Error, URL already in the map.";
-			return Response.status(400).entity(output).build();
+		else {
+			output = "Invalid URL inserted.";
+			responseStatus = 400;
 		}
+		
+		return Response.status(responseStatus).entity(output).build();
 	}
 
 	@GET
@@ -177,5 +191,21 @@ public class UrlResource {
 		return Response.status(responseId).entity(output).build();
 	}
 	
+	@DELETE
+	@Path("")
+	@Produces("text/plain")
+	@Consumes("application/xml")
+	public Response deleteIgnore() {
+
+		int responseId;
+		String output;
+		output = "Delete operation without parameters is not supported.";
+		responseId = 204;
+		return Response.status(responseId).entity(output).build();
+	}
+	
+	private boolean isValidInputUrl(String urlInput) {
+		return true;
+	}
 	
 }

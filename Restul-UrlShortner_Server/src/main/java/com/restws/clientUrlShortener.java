@@ -29,9 +29,6 @@ public static void main(String[] args) throws ClientProtocolException, IOExcepti
   Client client = Client.create(config);
   
   WebResource service = client.resource(UriBuilder.fromUri("http://localhost:8080/Restul-UrlShortner/service/targetresource/").build());
-  // getting XML data
-  //System.out.println(service. path(PARAM_ID).path("0").accept(MediaType.TEXT_PLAIN).get(String.class));
-  //System.out.println(service. path("url").path("www.gmail.com").accept(MediaType.TEXT_PLAIN).get(String.class));
 
   // Test Cases
   ArrayList<ArrayList<String>> testCases = new ArrayList<ArrayList<String>>();
@@ -79,6 +76,15 @@ public static void main(String[] args) throws ClientProtocolException, IOExcepti
   scenario5.add("Identificator " + TargetUrl.HTTP_GROUP5+"1" + " removed.");
   
   testCases.add(scenario5);
+  
+  ArrayList<String> scenario6 = new ArrayList<String>();
+
+  scenario6.add(DELETE_REQUEST);
+  scenario6.add("");
+  scenario6.add("");
+  scenario6.add("Delete operation without parameters is not supported.");
+  
+  testCases.add(scenario6);
   
   for (ArrayList<String> testCase : testCases) {
 	  invokeServer(service, testCase.get(0), testCase.get(1), testCase.get(2), testCase.get(3));

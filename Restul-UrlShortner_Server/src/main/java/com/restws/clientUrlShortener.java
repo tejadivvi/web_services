@@ -59,6 +59,15 @@ public static void main(String[] args) throws ClientProtocolException, IOExcepti
   
   testCases.add(scenario3);
   
+  ArrayList<String> scenario7 = new ArrayList<String>();
+
+  scenario7.add(POST_REQUEST);
+  scenario7.add("");
+  scenario7.add("www.googlecom");
+  scenario7.add("400 Bad Request");
+  
+  testCases.add(scenario7);
+  
   ArrayList<String> scenario4 = new ArrayList<String>();
 
   scenario4.add(GET_REQUEST);

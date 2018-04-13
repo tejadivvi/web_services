@@ -14,6 +14,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.validator.UrlValidator;
+
 import com.sun.jersey.spi.resource.Singleton;
 
 @Path("/targetresource")
@@ -46,6 +48,7 @@ public class UrlResource {
 			boolean newUrl = true;
 			TargetUrl tu = new TargetUrl();
 
+			System.out.println("url received - post method: " + url);
 			
 			if (!urlMap.isEmpty()) {			
 				for (TargetUrl storedUrl : urlMap.values()) {
@@ -205,7 +208,22 @@ public class UrlResource {
 	}
 	
 	private boolean isValidInputUrl(String urlInput) {
-		return true;
+		boolean result;
+		
+		if (!urlInput.contains("http://") && !urlInput.contains("https://")) {
+			urlInput = "http://" + urlInput;
+		}
+		
+		UrlValidator urlValidator = new UrlValidator();
+	    if (urlValidator.isValid(urlInput)) {
+	       System.out.println("url is valid");
+	       result = true;
+	    } else {
+	       System.out.println("url is invalid: " + urlInput);
+	       result = false;
+	    }
+	    
+	    return result;
 	}
 	
 }

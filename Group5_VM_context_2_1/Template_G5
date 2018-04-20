@@ -1,0 +1,29 @@
+NAME   = Template_Group5
+CPU    = 1
+VCPU   = 2
+MEMORY = 1024
+
+DISK   = [
+        IMAGE_ID = 1080,
+        DRIVER = "qcow2"
+]
+
+NIC    = [ NETWORK_ID = 0 ]
+
+
+OS     = [
+  ARCH = "x86_64",
+  BOOT = "disk0"
+]
+
+GRAPHICS = [
+  TYPE    = "vnc",
+  LISTEN  = "0.0.0.0"
+]
+
+CONTEXT=[
+  FILES="/var/scratch/clda1805/boot.sh /var/scratch/clda1805/deployment.sh  /var/scratch/clda1805/deployment_files/apache-tomcat-8.5.30.tar.gz /var/scratch/clda1805/deployment_files/jdk-8u161-linux-x64.tar.gz /var/scratch/clda1805/deployment_files/Restul-UrlShortner.war",
+  NETWORK="yes",
+  SSH_PUBLIC_KEY="$USER[SSH_PUBLIC_KEY]",
+  START_SCRIPT="#!/bin/bash
+  sh boot.sh" ]
